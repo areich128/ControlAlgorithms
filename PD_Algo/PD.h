@@ -21,6 +21,10 @@ class PD {
         double _dt = 0.1;
         double _phidot;
         double _phidotdot;
+        double _force = 1;
+        double _distance = 1;
+        double _inertia = 1;
+        double _t_range = 200;
 
     public:
         PD();
@@ -28,6 +32,8 @@ class PD {
         double getError(double, double);
         double applyPD(double, double);
         double applyDynamics(double, double);
+        void tune();
+        void run(int version);
 
         double getKp();
         void setKp(double);
