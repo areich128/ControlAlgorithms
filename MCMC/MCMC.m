@@ -103,8 +103,8 @@ function dydt = cartPendulumODE(t, y, m, M, L, g, d, esum)
     if abs(error) < 0.25
         F = -(Kp_t * error) - (Kd_t * errordot) + (Ki * esum);
     else
-        energy_ref = 0; % m * g * -L;
-        energy = 0.5*m*(L*thetadot)^2 + m*g*L*cos(theta);
+        energy_ref = m*g*2*L;
+        energy = 0.5*m*(L*thetadot)^2 - m*g*L*cos(theta);
         energy_error = energy_ref - energy;
         if theta ~= 0 && thetadot ~= 0
             F = sign(-thetadot) * (Kp_e * energy_error);
