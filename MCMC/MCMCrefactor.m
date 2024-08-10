@@ -23,7 +23,7 @@ g = 9.81;
 d = 0.75;
 
 ref = pi;
-theta0 = pi - 0.9;
+theta0 = 0;
 
 % y = simulate(error, F, tspan, Kp, Kd, Ku_e, Kd_e, m, M, L, g, d, ref, theta0);
 
@@ -97,7 +97,7 @@ elseif graph == 1
     
     figure;
     axis equal;
-    axis([-5 5 -0.8 0.8]);
+    axis([-3 3 -0.8 0.8]);
     grid on;
     hold on;
     
@@ -125,7 +125,7 @@ elseif graph == 1
         rectangle('Position', [x - cartWidth/2, -cartHeight/2, cartWidth, cartHeight], 'Curvature', 0.1, 'FaceColor', [0.8 0.1 0.1]);
     
         % Draw the pendulum
-        line([x pendulumX], [0 pendulumY], 'Color', 'b', 'LineWidth', 2);
+        line([x pendulumX], [0 pendulumY], 'Color', 'b', 'LineWidth', 3);
     
         % Draw the pendulum bob
         rectangle('Position', [(pendulumX - pendulumWidth/2) (pendulumY - pendulumWidth/2) (pendulumWidth) (pendulumWidth)], 'Curvature', [1, 1], 'FaceColor', [0.1 0.1 0.8]);
