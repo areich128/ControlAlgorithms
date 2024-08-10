@@ -41,3 +41,7 @@ $s^2 - x(K_p + sK_d)$
 Comparing this to the base characteristic equation $s^2 + 2\zeta\omega_n s + \omega_n ^2 = 0$, we can solve for $K_d$ and $K_p$.
 
 **NOTE:** The use of an integral gain $K_i$ was intentionally omitted. I wanted to be able to actually do the math to tune the controller, and using an integral gain creates a 3rd order system, which I do not know how to work with yet. Since integral gains are intended to remedy steady state error, I didn't feel this was necessary yet anyways.
+
+## MCMC Algorithm
+
+Notes on this can be found in /MCMC/MCMC_Notes.md . I experimented with this method through the example of an inverted pendulum system, and tuned it to be able to both swing up and down, from any starting position.
