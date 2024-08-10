@@ -11,11 +11,11 @@ y = zeros(4, length(tspan));
 error = zeros(length(tspan));
 F = zeros(length(tspan));
 
-Kp = 5;
+Kp = 7;
 Ki = 0.001;
 Kd = 5;
-Ku_e = 5;
-Kd_e = 3;
+Ku_e = 4;
+Kd_e = 1.5;
 m = 0.2;        
 M = 0.4;        
 L = 0.75;       
@@ -24,6 +24,9 @@ d = 0.75;
 
 ref = pi;
 theta0 = 0;
+
+ref1 = 0;
+theta01 = pi;
 
 % y = simulate(error, F, tspan, Kp, Kd, Ku_e, Kd_e, m, M, L, g, d, ref, theta0);
 
@@ -35,11 +38,11 @@ xprime = zeros(4, 1);
 
 accepted = 0;
 sigma = 0.005;
-J = cost(tspan, x(1,1), x(2,1), x(3,1), x(4,1), m, M, L, g, d, ref, theta0);
+J = cost(tspan, x(1,1), x(2,1), x(3,1), x(4,1), m, M, L, g, d, ref, theta0) + cost(tspan, x(1,1), x(2,1), x(3,1), x(4,1), m, M, L, g, d, ref1, theta01);
 %fprintf("Initial J = " + J + "\n");
 for i = 1:length(trainspan) - 1
     xprime = min(x(:,i) + (sigma * randn(4, 1)), [10; 10; 10; 10]);
-    Jprime = cost(tspan, xprime(1,1), xprime(2,1), xprime(3,1), xprime(4,1), m, M, L, g, d, ref, theta0);
+    Jprime = cost(tspan, xprime(1,1), xprime(2,1), xprime(3,1), xprime(4,1), m, M, L, g, d, ref, theta0) + cost(tspan, xprime(1,1), xprime(2,1), xprime(3,1), xprime(4,1), m, M, L, g, d, ref1, theta01);
     alpha = min(1, exp(J - Jprime));
     u = rand;
     if u <= alpha
@@ -64,7 +67,7 @@ percent = (accepted / length(trainspan)) * 100;
 
 % RUN THE SIMULATION WITH THE CALCULATED GAINS
 %y = simulate(error, F, tspan, x(1,1), x(2,1), x(3,1), x(4,1), m, M, L, g, d, ref, theta0);
-y = simulate(error, F, tspan, 6.9982, 0.57923, 3.7923, 2.6123, m, M, L, g, d, ref, theta0);
+y = simulate(error, F, tspan, 8.5656, 0.6379, 1.2872, 1.4782, m, M, L, g, d, ref, 5*pi/4);
 
 %% ANIMATION CODE
 graph = 1;
@@ -131,6 +134,9 @@ elseif graph == 1
         rectangle('Position', [(pendulumX - pendulumWidth/2) (pendulumY - pendulumWidth/2) (pendulumWidth) (pendulumWidth)], 'Curvature', [1, 1], 'FaceColor', [0.1 0.1 0.8]);
     
         % Pause to create animation effect
+        if k == 1
+            pause(1);
+        end
         pause(0.01);
     end
 elseif graph == 2
@@ -218,7 +224,12 @@ function [y, F] = simulate(error, F, tspan, Kp, Kd, Ku_e, Kd_e, m, M, L, g, d, r
                 F(i) = min((Kp * error(i)) + (Kd * errordot(i)) - (Ki * esum(i)), 20);
                 %fprintf("PID SWING UP ACTIVATED AT x=" + i + "\n");
             elseif (ref == 0) % SWING DOWN
-                F(i) = min((Kp * error(i)) + (Kd * errordot(i)) - (Ki * esum(i)), 20);
+                if theta > pi
+                    ref = 2*pi;
+                    error(i) = ref - theta;
+                    errordot(i) = thetadot;
+                end
+                F(i) = min(-(Kp * error(i)) - (Kd * errordot(i)) - (Ki * esum(i)), 20);
                 %fprintf("PID SWING DOWN ACTIVATED AT x=" + i + "\n");
             end
         else
@@ -238,7 +249,7 @@ function [y, F] = simulate(error, F, tspan, Kp, Kd, Ku_e, Kd_e, m, M, L, g, d, r
                 if PE_p == 2*m*g*L
                     F(i) = Kd_e;
                 % elseif PE_p > m*g*L
-                %     F(i) = sign(-thetadot) * energy_error;
+                %     F(i) = min(Kd_e * sign(thetadot) * energy_error, 20);
                 elseif PE_p < m*g*L
                     F(i) = min(Kd_e * sign(-thetadot) * energy_error, 20);
                 end
