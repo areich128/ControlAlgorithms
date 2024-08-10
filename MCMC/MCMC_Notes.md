@@ -17,8 +17,9 @@ The steps were these:
 3. A random amount was added to each gain, based on a gaussian distribution with a standard deviation of 0.005 (determined through guessing).
 4. A cost was calculated for the old set of gains (lets call them $\bf(x)$) and the proposed set of gains ($\bf(x')$) by running the control system simulation for both sets of gains and comparing the outputs.
     - To increase efficiency, only the cost for $\bf(x')$ is computed. If $\bf(x')$ is accepted, then the original cost becomes this new cost. Otherwise it stays the same.
+    - Since I wanted to optimize for both swing-up and swing-down, my cost was the sum of the costs for both scenarios. I.e., to compute the cost I found the swing-up scenario's cost as well as the swing-down scenario's cost, and added the two for the total cost of that particular gain set.
 5. An acceptance probability was computed based on the formula $\alpha = min(1, exp(J - J'))$ where J and J' are the current and proposed costs.
 6. A random number between 0 and 1 was computed. If $\alpha$ is less than or equal to that number, $\bf(x)$ becomes $\bf(x')$. Otherwise, $\bf(x)$ remains the same. This means that the gain set with the lowest cost does not always get accepted, which is important because that prevents the solution from becoming stuck in local minima. This is the **Metropolis-Hastings Algorithm** and is important because it allows a larger amount of the state space to be explored.
 7. Steps 2-6 were repeated between 1,000 and 10,000 times, until the gains converged. The percentage of accepted gains was recorded as well. The percentage of accepted gains to total iterations should be around 20-40%. If it is too high, you can either decrease your standard deviation or change your cost function. If it is too low, increase the standard deviation or also change the cost function.
-    - Getting a good cost function is crucial. 
-    - Also, remember that the gains are going to be specific to the situation that you "train" them on. So far, I have only trained this control system to do a swing-up. I want to also train it for a swing down, which I will do in the future.
+    - Getting a good cost function is crucial, learned this the hard way.
+    - Gains are going to be specific to the situation that you "train" them on.
