@@ -1,4 +1,4 @@
-%% MCMC PID tuning for inverted pendulum
+%% [DEPRECATED] MCMC PID tuning for inverted pendulum
 
 %% System Dynamics Code
 
