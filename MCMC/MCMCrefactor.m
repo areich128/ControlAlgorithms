@@ -67,7 +67,7 @@ percent = (accepted / length(trainspan)) * 100;
 
 % RUN THE SIMULATION WITH THE CALCULATED GAINS
 %y = simulate(error, F, tspan, x(1,1), x(2,1), x(3,1), x(4,1), m, M, L, g, d, ref, theta0);
-y = simulate(error, F, tspan, 8.5656, 0.6379, 1.2872, 1.4782, m, M, L, g, d, ref, 5*pi/4);
+y = simulate(error, F, tspan, 8.5656, 0.6379, 1.2872, 1.4782, m, M, L, g, d, ref, pi/4);
 
 %% ANIMATION CODE
 graph = 1;
@@ -137,7 +137,7 @@ elseif graph == 1
         if k == 1
             pause(1);
         end
-        pause(0.01);
+        pause(0.05);
     end
 elseif graph == 2
     figure;
