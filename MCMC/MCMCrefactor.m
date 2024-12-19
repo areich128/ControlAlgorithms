@@ -1,6 +1,7 @@
 %% MCMC PID tuning for inverted pendulum
 clear;
 % clc;
+close all;
 
 %% System Dynamics Code
 
@@ -137,7 +138,7 @@ elseif graph == 1
         if k == 1
             pause(1);
         end
-        pause(0.05);
+        pause(0.01);
     end
 elseif graph == 2
     figure;
